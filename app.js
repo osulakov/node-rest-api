@@ -14,7 +14,8 @@ const productRoutes = require('./api/routes/products'); //import module router f
 const orderRoutes = require('./api/routes/orders'); //import module router from orders
 
 //6.
-mongoose.connect('mongodb://localhost/node-rest-api', { useNewUrlParser: true });
+mongoose.set('useCreateIndex', true);
+mongoose.connect('mongodb://localhost/node-rest-api', { useUnifiedTopology: true, useNewUrlParser: true });
 //7. to use default NodeJS promise implementation
 mongoose.Promise = global.Promise;
 
