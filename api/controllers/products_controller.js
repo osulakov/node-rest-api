@@ -8,24 +8,24 @@ const Product = require('../models/product');
 //middlewqre line
 exports.products_get_all = (req, res, next) => {
     Product.find()
-        .select('name price _id productImage') //which elements we want to show in response
+        //.select('name price _id productImage') //which elements we want to show in response
         .exec() //we use this method to get a real promise
         .then(docs => {
             const response = {
                 count: docs.length,
-                //products: docs // 7.  if I want to send standart object info with response
-                products: docs.map(doc => { //7. if I want to send more info with response
-                    return {
-                        name: doc.name,
-                        price: doc.price,
-                        _id:  doc._id,
-                        productImage: doc.productImage,
-                        request: {
-                            type: "GET",
-                            url: 'http://localhost:3000/products' + doc._id
-                        }
-                    }
-                })
+                products: docs // 7.  if I want to send standart object info with response
+                // products: docs.map(doc => { //7. if I want to send more info with response
+                //     return {
+                //         name: doc.name,
+                //         price: doc.price,
+                //         _id:  doc._id,
+                //         productImage: doc.productImage,
+                //         request: {
+                //             type: "GET",
+                //             url: 'http://localhost:3000/products' + doc._id
+                //         }
+                //     }
+                // })
             }
             res.status(200).json(response); //sending json response (can check it using Post software)
         })
@@ -41,6 +41,14 @@ exports.products_create_product = (req, res, next) => {
     const product = new Product({ //6. creating const to store new object (product) to db
         _id: new mongoose.Types.ObjectId(),//executed as a function to automaticaly generate id
         name: req.body.name,
+        model: req.body.model,
+        year: req.body.year,
+        color: req.body.color,
+        mileage: req.body.mileage,
+        fuel: req.body.fuel,
+        engine: req.body.engine,
+        transmission: req.body.transmission,
+        other: req.body.other,
         price: req.body.price,
         productImage: req.file.path
     }); 
@@ -50,16 +58,17 @@ exports.products_create_product = (req, res, next) => {
             console.log(result);
             res.status(201).json({
                 message: 'Handling POST request to /products. Created object succesfully',
-                createdProduct: { // 7.
-                    name: result.name,
-                    price: result.price,
-                    _id: result._id,
-                    productImage: result.productImage,
-                    request: {
-                        type: 'POST',
-                        url: 'http://localhost:3000/products' + result._id
-                    }
-                } 
+                result: result
+                // createdProduct: { // 7.
+                //     name: result.name,
+                //     price: result.price,
+                //     _id: result._id,
+                //     productImage: result.productImage,
+                //     request: {
+                //         type: 'POST',
+                //         url: 'http://localhost:3000/products' + result._id
+                //     }
+                // } 
             }); //sending json response
         })
         .catch(err => {

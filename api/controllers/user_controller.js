@@ -24,6 +24,7 @@ exports.user_signup = (req, res, next) => {
                     const user = new User({
                         _id: new mongoose.Types.ObjectId(),//executed as a function to automaticaly generate id
                         email: req.body.email,
+                        role: req.body.role,
                         password: hash
                     });
                     user

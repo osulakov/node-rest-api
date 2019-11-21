@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');//to parse form data bodies
-const checkAuth = require('../middleware/check-auth');//importing check-auth module (valid moddleware function)
 
+const checkAuth = require('../middleware/check-auth');//importing check-auth module (valid moddleware function)
 const ProductsController = require('../controllers/products_controller');
 
 //here we can setup the destination of the uploaded file and its name
@@ -35,9 +35,6 @@ const upload = multer({
     fileFilter: fileFilter 
 }); //passing configuration to multer
 //this specifies a folder where the multer will try to store files and file name
-
-//6. importing the productSchema
-const Product = require('../models/product');
 
 //get is the method which handles incoming get requiests
 //its address is '/products', but we want to reach this directly

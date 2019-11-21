@@ -4,7 +4,7 @@
 const jwt = require('jsonwebtoken');
 
 
-//here we use default niddleware pattern
+//here we use default middleware pattern
 //for the tests in the Postman we put token into header abd use keyword 'Bearer' in the front 
 module.exports = (req, res, next) => {
     try {

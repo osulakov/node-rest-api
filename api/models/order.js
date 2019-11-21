@@ -9,6 +9,7 @@ const orderSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     //connect product to our order. In this exemple we have only one type of product for the order
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true}, //7.
+    // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     quantity: { type: Number, default: 1 }
 });
 

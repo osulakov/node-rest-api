@@ -1,7 +1,7 @@
 const http = require('http'); 
 const app = require('./app'); //import app from app.js
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 //we need to pass a listener here,  this is a function which is
 //executed when ever we got a new request and is responsible for
