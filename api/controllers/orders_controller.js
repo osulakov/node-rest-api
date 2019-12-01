@@ -1,11 +1,12 @@
 const mongoose = require('mongoose'); //need this to create id
+const jwt = require('jsonwebtoken');
 
 const Order = require('../models/order');
 const Product = require('../models/product'); //we will use this in the cheching if we order existing product
 
 // argument 'next' (which is the arrow function) pushes our request to the next 
 // middlewqre line 
-exports.orders_get_all = (req, res, next) => {
+exports.orders_get_all = (req, res, next) => { //only for admins and supervisors
     Order.find()
         .select('product quantity _id')
         //if we want to add product information into the orders list or into the single order
@@ -35,8 +36,39 @@ exports.orders_get_all = (req, res, next) => {
         });
 }
 
+exports.orders_get_users_orders = (req, res, next) => {
+    var token = req.headers.authorization;
+    var decoded = jwt.decode(token);
+    var userId = decoded.userId;
+    Order.find({'user': userId})
+    .exec()
+    .then(docs => {
+        res.status(200).json({
+            count: docs.length,
+            orders: docs.map(doc => {
+                return {
+                    _id: doc._id,
+                    product: doc.product,
+                    quantity: doc.quantity,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:5000/orders/' + userId,
+                    }
+                }
+            })
+        });
+    })
+    .catch(err =>{
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    })
+}
+
 exports.orders_create_order = (req, res, next) => {
     //adding some logic to control cases if we try to add to the order the product which doesn't exist
+    console.log(req.body.productId)
     Product.findById(req.body.productId)
         .then(product => {
             if(!product) {
@@ -47,10 +79,10 @@ exports.orders_create_order = (req, res, next) => {
             const order = new Order({
                 _id: new mongoose.Types.ObjectId(),//executed as a function to automaticaly generate id
                 quantity: req.body.quantity,
-                product: req.body.productId
+                product: req.body.productId,
+                user: req.body.userId
             });
-            return order
-                .save() //don't need exec(), coz save() gives us real promise as default      
+            return order.save() //don't need exec(), coz save() gives us real promise as default      
         })
         .then(result => {
             console.log(result);
@@ -59,7 +91,8 @@ exports.orders_create_order = (req, res, next) => {
                 createdOrder: {
                     _id: result._id,
                     product: result.product,
-                    quantity: result.quantity
+                    quantity: result.quantity,
+                    user: result.user
                 },
                 request: {
                     type: "POST",

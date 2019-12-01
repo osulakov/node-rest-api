@@ -42,7 +42,7 @@ const upload = multer({
 router.get('/', ProductsController.products_get_all);
 
 //upload.single() is a middleware here which we connect to this router/function ? , it helps us to parse a file
-router.post('/', checkAuth, upload.single('productImage'),ProductsController.products_create_product);
+router.post('/', upload.single('productImage'), ProductsController.products_create_product);
 
 router.get('/:productId', ProductsController.products_get_one_product);
 

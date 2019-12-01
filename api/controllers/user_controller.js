@@ -30,9 +30,21 @@ exports.user_signup = (req, res, next) => {
                     user
                         .save()
                         .then(result => {
+                            const token = jwt.sign(
+                                { //payload
+                                    email: user.email,
+                                    role: user.role,
+                                    userId: user._id
+                                }, 
+                                'secret',
+                                {  // options
+                                    expiresIn: "1h"
+                                }
+                                );
                             console.log(result);
                             res.status(201).json({
-                                message: 'User created'
+                                message: 'User created',
+                                token: token
                             });
                         })
                         .catch(err => {
@@ -70,6 +82,7 @@ exports.user_login = (req, res, next) => {
                     const token = jwt.sign(
                         { //payload
                             email: user[0].email,
+                            role: user[0].role,
                             userId: user[0]._id
                         }, 
                         'secret',//process.env.JWT_KEY, //secretOfPrivatKey
@@ -79,6 +92,7 @@ exports.user_login = (req, res, next) => {
                         );
                     return res.status(200).json({
                         message: 'Auth successful',
+                        userId: user[0]._id,
                         token: token
                     });
                 }

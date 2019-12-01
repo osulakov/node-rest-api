@@ -37,7 +37,7 @@ exports.products_get_all = (req, res, next) => {
 
 exports.products_create_product = (req, res, next) => {
     // upload.single('productImage') - for uploading image
-    console.log(req.file);
+    console.log(req.body);
     const product = new Product({ //6. creating const to store new object (product) to db
         _id: new mongoose.Types.ObjectId(),//executed as a function to automaticaly generate id
         name: req.body.name,
@@ -73,7 +73,11 @@ exports.products_create_product = (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({error: err});
+            res.status(500).json(
+                {
+                    error: err,
+                    req: req.body
+                });
         }); //chaning 'catch' to catch errors
 }
 
@@ -82,7 +86,7 @@ exports.products_get_one_product = (req, res, next) => {
     const id = req.params.productId;
     //6.
     Product.findById(id)
-        .select('name price _id productImage')
+        //.select('name price _id productImage')
         .exec()
         .then(document => {
             console.log(document);

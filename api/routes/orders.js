@@ -11,9 +11,11 @@ const OrdersController = require('../controllers/orders_controller');
 //get is the method which handles incoming get requiests
 //its address is '/products', but we want to reach this one directly using '/' from the app.js
 
-router.get('/', checkAuth, OrdersController.orders_get_all);
+router.get('/', OrdersController.orders_get_all);
 
-router.post('/', checkAuth, OrdersController.orders_create_order);
+router.get('/user_orders', OrdersController.orders_get_users_orders);
+
+router.post('/', OrdersController.orders_create_order);
 
 router.get('/:orderId', checkAuth, OrdersController.orders_get_one_order);
 

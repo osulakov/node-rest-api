@@ -17,7 +17,7 @@ const productSchema = mongoose.Schema({
     transmission: { type: String, required: true },
     other: { type: String, required: false },
     price: { type: Number, required: true }, //7.
-    productImage: {type: String, required: true} //10.
+    productImage: {type: String, required: false} //10.
 });
 
 //First argument is the name what we want to use outside
